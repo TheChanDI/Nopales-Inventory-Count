@@ -29,6 +29,7 @@ const CollapsibleView = ({ children, title, data }: Props) => {
           {data?.map((item, index) => {
             return (
               <InventoryItem
+                perBox={item.perBox}
                 label={item.label}
                 key={`${item.label}-${index}`}
               />
