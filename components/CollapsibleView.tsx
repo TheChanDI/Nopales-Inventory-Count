@@ -1,5 +1,6 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import InventoryItem from "@/features/home/InventoryItem";
+import React, { useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Container } from "./Container";
 import { TextComponent } from "./TextComponent";
 
@@ -13,21 +14,28 @@ interface Props {
 }
 
 const CollapsibleView = ({ children, title, data }: Props) => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
   return (
-    <Container>
-      <TextComponent style={{ fontSize: 18 }}>{title}</TextComponent>
-      <Container style={{ marginLeft: 10 }}>
-        {data?.map((item, index) => {
-          return (
-            <Container key={`${item.label}-${index}`}>
-              <TextComponent style={{ fontSize: 15 }}>
-                {item.label}
-              </TextComponent>
-              <Container></Container>
-            </Container>
-          );
-        })}
-      </Container>
+    <Container style={{ marginBottom: 20 }}>
+      <TouchableOpacity
+        onPress={() => setIsCollapsed((value) => !value)}
+        activeOpacity={0.7}
+      >
+        <TextComponent style={{ fontSize: 28 }}>{title}</TextComponent>
+      </TouchableOpacity>
+      {isCollapsed && (
+        <Container style={{ marginLeft: 10 }}>
+          {data?.map((item, index) => {
+            return (
+              <InventoryItem
+                label={item.label}
+                key={`${item.label}-${index}`}
+              />
+            );
+          })}
+        </Container>
+      )}
     </Container>
   );
 };
