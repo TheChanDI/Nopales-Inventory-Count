@@ -15,7 +15,6 @@ interface Props {
 
 const CollapsibleView = ({ children, title, data }: Props) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-
   return (
     <Container style={{ marginBottom: 20 }}>
       <TouchableOpacity
@@ -29,6 +28,7 @@ const CollapsibleView = ({ children, title, data }: Props) => {
           {data?.map((item, index) => {
             return (
               <InventoryItem
+                type={title}
                 perBox={item.perBox}
                 label={item.label}
                 key={`${item.label}-${index}`}

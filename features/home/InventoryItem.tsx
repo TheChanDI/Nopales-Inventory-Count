@@ -1,26 +1,47 @@
 import { Container } from "@/components/Container";
 import { TextComponent } from "@/components/TextComponent";
+import useInventoryStore from "@/store/useInventoryStore";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as Haptics from "expo-haptics";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 interface Props {
+  type: string;
   label: string;
   perBox: number;
 }
 
-const InventoryItem = ({ label, perBox }: Props) => {
-  const [count, setCount] = useState(0);
-  const [boxCount, setBoxCount] = useState(0);
+const InventoryItem = ({ label, perBox, type }: Props) => {
+  const inventory = useInventoryStore((state) => state.inventory);
+  const setInventory = useInventoryStore((state) => state.setInventory);
+  const count = inventory[type]?.[label]?.count ?? 0;
+  const boxCount = inventory[type]?.[label]?.boxCount ?? 0;
 
   const increment = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (count === perBox - 1) {
-      setCount(0);
-      setBoxCount(boxCount + 1);
+      setInventory({
+        ...inventory,
+        [type]: {
+          ...inventory[type],
+          [label]: {
+            count: 0,
+            boxCount: boxCount + 1,
+          },
+        },
+      });
     } else {
-      setCount(count + 1);
+      setInventory({
+        ...inventory,
+        [type]: {
+          ...inventory[type],
+          [label]: {
+            ...inventory[type]?.[label],
+            count: count + 1,
+          },
+        },
+      });
     }
   };
 
@@ -61,7 +82,16 @@ const InventoryItem = ({ label, perBox }: Props) => {
           <TouchableOpacity
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setCount((preValue) => (preValue > 0 ? preValue - 1 : 0));
+              setInventory({
+                ...inventory,
+                [type]: {
+                  ...inventory[type],
+                  [label]: {
+                    ...inventory[type]?.[label],
+                    count: count > 0 ? count - 1 : 0,
+                  },
+                },
+              });
             }}
             activeOpacity={0.7}
           >
@@ -75,7 +105,16 @@ const InventoryItem = ({ label, perBox }: Props) => {
         <Container style={{ flexDirection: "row", marginLeft: 20, gap: 20 }}>
           <TouchableOpacity
             onPress={() => {
-              setBoxCount(boxCount + 1);
+              setInventory({
+                ...inventory,
+                [type]: {
+                  ...inventory[type],
+                  [label]: {
+                    ...inventory[type]?.[label],
+                    boxCount: boxCount + 1,
+                  },
+                },
+              });
             }}
             activeOpacity={0.7}
             style={{
@@ -90,7 +129,16 @@ const InventoryItem = ({ label, perBox }: Props) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              setBoxCount((preValue) => (preValue > 0 ? preValue - 1 : 0))
+              setInventory({
+                ...inventory,
+                [type]: {
+                  ...inventory[type],
+                  [label]: {
+                    ...inventory[type]?.[label],
+                    boxCount: boxCount > 0 ? boxCount - 1 : 0,
+                  },
+                },
+              })
             }
             activeOpacity={0.7}
             style={{
