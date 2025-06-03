@@ -95,16 +95,18 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
             }}
             activeOpacity={0.7}
           >
-            <AntDesign name="minussquareo" size={22} color="black" />
+            <AntDesign name="minussquareo" size={22} color="#273022" />
           </TouchableOpacity>
           <TextComponent style={{ fontSize: 22 }}>{count}</TextComponent>
           <TouchableOpacity onPress={increment} activeOpacity={0.7}>
-            <AntDesign name="plussquareo" size={22} color="black" />
+            <AntDesign name="plussquareo" size={22} color="#273022" />
           </TouchableOpacity>
         </Container>
         <Container style={{ flexDirection: "row", marginLeft: 20, gap: 20 }}>
           <TouchableOpacity
             onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
               setInventory({
                 ...inventory,
                 [type]: {
@@ -118,7 +120,7 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
             }}
             activeOpacity={0.7}
             style={{
-              backgroundColor: "black",
+              backgroundColor: "#273022",
               paddingHorizontal: 10,
               borderRadius: 2,
             }}
@@ -128,7 +130,8 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
             </TextComponent>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               setInventory({
                 ...inventory,
                 [type]: {
@@ -138,8 +141,8 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
                     boxCount: boxCount > 0 ? boxCount - 1 : 0,
                   },
                 },
-              })
-            }
+              });
+            }}
             activeOpacity={0.7}
             style={{
               backgroundColor: "white",

@@ -16,12 +16,21 @@ interface Props {
 const CollapsibleView = ({ children, title, data }: Props) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   return (
-    <Container style={{ marginBottom: 20 }}>
+    <Container
+      style={{
+        marginBottom: 20,
+        borderBottomWidth: 0.7,
+        paddingBottom: 20,
+        borderBottomColor: "#CED3CC",
+      }}
+    >
       <TouchableOpacity
         onPress={() => setIsCollapsed((value) => !value)}
         activeOpacity={0.7}
       >
-        <TextComponent style={{ fontSize: 28 }}>{title}</TextComponent>
+        <TextComponent style={{ fontSize: 22, fontWeight: "600" }}>
+          {title}
+        </TextComponent>
       </TouchableOpacity>
       {isCollapsed && (
         <Container style={{ marginLeft: 10 }}>

@@ -1,7 +1,14 @@
 import CollapsibleView from "@/components/CollapsibleView";
 import { Container } from "@/components/Container";
+import { TextComponent } from "@/components/TextComponent";
+import useInventoryStore from "@/store/useInventoryStore";
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 const sparkingList = [
   {
@@ -40,34 +47,74 @@ const roseList = [
     perBox: 6,
   },
 ];
-
 const HomeScreen = () => {
+  const inventory = useInventoryStore((state) => state.inventory);
+
+  const handleSave = async () => {
+    console.log(inventory, "data -->");
+    try {
+      const response = await fetch("http://localhost:3001/inventory", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inventory),
+      });
+      const data = await response.text();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: 30 }}
-      style={{ flex: 1 }}
-    >
-      <Container style={{ paddingHorizontal: 20, paddingTop: 10 }}>
-        <CollapsibleView
-          data={sparkingList}
-          title="Sparkling Wine"
-        ></CollapsibleView>
-        <CollapsibleView data={roseList} title="Rose"></CollapsibleView>
-        <CollapsibleView title="Red Wine"></CollapsibleView>
-        <CollapsibleView title="Tequilla (Blanco)"></CollapsibleView>
-        <CollapsibleView title="Tequilla (Reposado)"></CollapsibleView>
-        <CollapsibleView title="Tequilla (Anejo)"></CollapsibleView>
-        <CollapsibleView title="Mezcal"></CollapsibleView>
-        <CollapsibleView title="Spirits (Vodka)"></CollapsibleView>
-        <CollapsibleView title="Spirits (Gin)"></CollapsibleView>
-        <CollapsibleView title="Spirits (Scotch)"></CollapsibleView>
-        <CollapsibleView title="Spirits (Whiskey)"></CollapsibleView>
-        <CollapsibleView title="Spirits (Rum)"></CollapsibleView>
-        <CollapsibleView title="Beers"></CollapsibleView>
-        <CollapsibleView title="Liqueur"></CollapsibleView>
-        <CollapsibleView title="Miscellaneous"></CollapsibleView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#E3E8E1" }}>
+      <Container
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 10,
+          backgroundColor: "#DAE0D6",
+        }}
+      >
+        <TouchableOpacity activeOpacity={0.7} onPress={handleSave}>
+          <TextComponent>Save</TextComponent>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7}>
+          <TextComponent>Reset</TextComponent>
+        </TouchableOpacity>
       </Container>
-    </ScrollView>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 30 }}
+        style={{ flex: 1 }}
+      >
+        <Container
+          style={{
+            paddingHorizontal: 20,
+            paddingTop: 10,
+          }}
+        >
+          <CollapsibleView
+            data={sparkingList}
+            title="Sparkling Wine"
+          ></CollapsibleView>
+          <CollapsibleView data={roseList} title="Rose"></CollapsibleView>
+          <CollapsibleView title="Red Wine"></CollapsibleView>
+          <CollapsibleView title="Tequilla (Blanco)"></CollapsibleView>
+          <CollapsibleView title="Tequilla (Reposado)"></CollapsibleView>
+          <CollapsibleView title="Tequilla (Anejo)"></CollapsibleView>
+          <CollapsibleView title="Mezcal"></CollapsibleView>
+          <CollapsibleView title="Spirits (Vodka)"></CollapsibleView>
+          <CollapsibleView title="Spirits (Gin)"></CollapsibleView>
+          <CollapsibleView title="Spirits (Scotch)"></CollapsibleView>
+          <CollapsibleView title="Spirits (Whiskey)"></CollapsibleView>
+          <CollapsibleView title="Spirits (Rum)"></CollapsibleView>
+          <CollapsibleView title="Beers"></CollapsibleView>
+          <CollapsibleView title="Liqueur"></CollapsibleView>
+          <CollapsibleView title="Miscellaneous"></CollapsibleView>
+        </Container>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
