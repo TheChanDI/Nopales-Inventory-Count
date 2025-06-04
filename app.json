@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "nopales-invCount",
-    "slug": "nopales-invCount",
+    "slug": "nopales-invcount",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "056a2029-7c6f-46ec-a157-df8d9208ee85"
+      }
+    },
+    "owner": "prakashchandi"
   }
 }

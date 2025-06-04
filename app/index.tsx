@@ -2,8 +2,9 @@ import CollapsibleView from "@/components/CollapsibleView";
 import { Container } from "@/components/Container";
 import { TextComponent } from "@/components/TextComponent";
 import useInventoryStore from "@/store/useInventoryStore";
-import React from "react";
+import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   SafeAreaView,
   ScrollView,
@@ -52,6 +53,7 @@ const roseList = [
 const HomeScreen = () => {
   const inventory = useInventoryStore((state) => state.inventory);
   const resetInventory = useInventoryStore((state) => state.resetInventory);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSentButton = () => {
     Alert.alert(
@@ -81,7 +83,7 @@ const HomeScreen = () => {
       return;
     }
 
-    console.log(inventory);
+    setIsLoading(true);
     try {
       const response = await fetch(
         "https://nopales-inv-backend.vercel.app/api/inventoryApi",
@@ -94,12 +96,14 @@ const HomeScreen = () => {
         }
       );
       const msg = await response.json();
+      setIsLoading(false);
       Toast.show({
         type: "success",
         text1: msg?.message || "Email sent successfully!",
       });
     } catch (error) {
       console.error("Error:", error);
+      setIsLoading(false);
       Toast.show({
         type: "error",
         text1: "Something went wrong.",
@@ -143,6 +147,14 @@ const HomeScreen = () => {
           <TextComponent>Reset</TextComponent>
         </TouchableOpacity>
       </Container>
+      {isLoading && (
+        <Container style={styles.indicatorContainer}>
+          <ActivityIndicator size={"large"} color={"#273022"} />
+          <TextComponent style={{ alignSelf: "center", marginTop: 10 }}>
+            Sending...
+          </TextComponent>
+        </Container>
+      )}
       <ScrollView
         contentContainerStyle={{ paddingBottom: 30 }}
         style={{ flex: 1 }}
@@ -179,4 +191,17 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  indicatorContainer: {
+    position: "absolute",
+    zIndex: 1,
+    height: 120,
+    width: 150,
+    backgroundColor: "#f2f2f2",
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 4,
+    left: "30%",
+    top: "40%",
+  },
+});
