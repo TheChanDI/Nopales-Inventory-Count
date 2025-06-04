@@ -4,6 +4,7 @@ import { devtools, persist } from "zustand/middleware";
 interface InventoryState {
   inventory: any;
   setInventory: (inventory: any) => void;
+  resetInventory: () => void;
 }
 
 const useInventoryStore = create<InventoryState>()(
@@ -12,6 +13,7 @@ const useInventoryStore = create<InventoryState>()(
       (set) => ({
         inventory: {},
         setInventory: (inventory) => set({ inventory }),
+        resetInventory: () => set({ inventory: {} }),
       }),
       { name: "inventory" }
     )

@@ -4,11 +4,13 @@ import { TextComponent } from "@/components/TextComponent";
 import useInventoryStore from "@/store/useInventoryStore";
 import React from "react";
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 const sparkingList = [
   {
@@ -49,22 +51,79 @@ const roseList = [
 ];
 const HomeScreen = () => {
   const inventory = useInventoryStore((state) => state.inventory);
+  const resetInventory = useInventoryStore((state) => state.resetInventory);
+
+  const handleSentButton = () => {
+    Alert.alert(
+      "Confirm Submission",
+      "Do you want to send the data?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Send",
+          onPress: handleSave,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   const handleSave = async () => {
-    console.log(inventory, "data -->");
-    try {
-      const response = await fetch("http://localhost:3001/inventory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inventory),
+    if (Object.entries(inventory).length === 0) {
+      Toast.show({
+        type: "error",
+        text1: "No data to send.",
       });
-      const data = await response.text();
-      console.log(data);
+      return;
+    }
+
+    console.log(inventory);
+    try {
+      const response = await fetch(
+        "https://nopales-inv-backend.vercel.app/api/inventoryApi",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(inventory),
+        }
+      );
+      const msg = await response.json();
+      Toast.show({
+        type: "success",
+        text1: msg?.message || "Email sent successfully!",
+      });
     } catch (error) {
       console.error("Error:", error);
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong.",
+      });
     }
+  };
+
+  const handleResetButton = () => {
+    Alert.alert(
+      "Confirm Reset",
+      "Do you want to reset the data?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Reset",
+          onPress: () => resetInventory(),
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -77,10 +136,10 @@ const HomeScreen = () => {
           backgroundColor: "#DAE0D6",
         }}
       >
-        <TouchableOpacity activeOpacity={0.7} onPress={handleSave}>
-          <TextComponent>Save</TextComponent>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleSentButton}>
+          <TextComponent>Sent</TextComponent>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity onPress={handleResetButton} activeOpacity={0.7}>
           <TextComponent>Reset</TextComponent>
         </TouchableOpacity>
       </Container>
