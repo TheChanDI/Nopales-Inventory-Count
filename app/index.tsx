@@ -6,9 +6,11 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
 } from "react-native";
 import Toast from "react-native-toast-message";
@@ -50,31 +52,178 @@ const roseList = [
     perBox: 6,
   },
 ];
+
+const redWineList = [
+  {
+    label: "2021 Campos de Espana Tempranilo",
+    perBox: 6,
+  },
+  {
+    label: "Vineto Tempranillo",
+    perBox: 6,
+  },
+  {
+    label: "2022 Astrale Chianti DOCG",
+    perBox: 12,
+  },
+  {
+    label: "2021 Tesoro De Los Andes",
+    perBox: 12,
+  },
+  {
+    label: "2022 YP Shiraz",
+    perBox: 12,
+  },
+  {
+    label: "Highgate Shiraz",
+    perBox: 12,
+  },
+  {
+    label: "2019 Chakana - Finca Los Cedros Malbec",
+    perBox: 6,
+  },
+  {
+    label: "2021 Uvo non Grata Gamay",
+    perBox: 12,
+  },
+  {
+    label: "2020 Harewood Reserve Cab Sauv",
+    perBox: 12,
+  },
+  {
+    label: "2023 Mulline, Pinot Noir",
+    perBox: 12,
+  },
+  {
+    label: "2017 Vina Ijalba Doca Reserva, Tempranillo",
+    perBox: 6,
+  },
+  {
+    label: "2015 La Sorda Reserva Rijoc",
+    perBox: 1,
+  },
+  {
+    label: "2016 Michele Chairlo Barolo Tortoniano",
+    perBox: 1,
+  },
+];
+
+const whiteWineList = [
+  {
+    label: "2022 Mezzacorona | Classic Pinot Grigio",
+    perBox: 12,
+  },
+  {
+    label: "Hentyfarm pino grigio",
+    perBox: 12,
+  },
+  {
+    label: "2022 Highgate Organic Chardonnay",
+    perBox: 12,
+  },
+  {
+    label: "2021 Franxamar Atlantic White Albarino",
+    perBox: 12,
+  },
+  {
+    label: "2021 SH Certified Organic Sauv Blanc",
+    perBox: 12,
+  },
+  {
+    label: "2023 Harewood Denmark Riesling",
+    perBox: 12,
+  },
+  {
+    label: "2022 Harewood Denmark Sauvignon Blanc Semillon",
+    perBox: 12,
+  },
+  {
+    label: "Great Southern Riesling",
+    perBox: 12,
+  },
+  {
+    label: "2021 AS Vincenzo Organic",
+    perBox: 6,
+  },
+  {
+    label: "2022 Lightfoot Chardonay",
+    perBox: 12,
+  },
+  {
+    label: "2020 Bodegas Tempo IGP, White Grenache",
+    perBox: 6,
+  },
+  {
+    label: "2020 Rieslingfreak",
+    perBox: 3,
+  },
+  {
+    label: "2021 Les Allees du Vignoble Chablis",
+    perBox: 1,
+  },
+];
+
+const beerList = [
+  {
+    label: "Peroni",
+    perBox: 24,
+  },
+  {
+    label: "Sol Cerveza",
+    perBox: 24,
+  },
+  {
+    label: "Balter Cerveza",
+    perBox: 24,
+  },
+  {
+    label: "Heaps Normal",
+    perBox: 24,
+  },
+  {
+    label: "Hazy IPA",
+    perBox: 16,
+  },
+  {
+    label: "Corona Extra",
+    perBox: 24,
+  },
+  {
+    label: "Stone & Wood Pacific Ale",
+    perBox: 24,
+  },
+  {
+    label: "Model Espadin",
+    perBox: 24,
+  },
+  {
+    label: "Young Henry cloudy cider",
+    perBox: 24,
+  },
+  {
+    label: "Ginger Beer",
+    perBox: 10,
+  },
+];
+
 const HomeScreen = () => {
-  const inventory = useInventoryStore((state) => state.inventory);
+  const inventory = useInventoryStore((state) => state.getInventory());
   const resetInventory = useInventoryStore((state) => state.resetInventory);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [recipientEmail, setRecipientEmail] = useState("");
+
+  /**
+   * Handles the logic for when the "Sent" button is pressed.
+   * This function sets the modal visibility to true, triggering
+   * the modal to appear on the screen.
+   */
 
   const handleSentButton = () => {
-    Alert.alert(
-      "Confirm Submission",
-      "Do you want to send the data?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Send",
-          onPress: handleSave,
-        },
-      ],
-      { cancelable: false }
-    );
+    setIsModalVisible(true);
   };
-
   const handleSave = async () => {
+    setIsModalVisible(false);
     if (Object.entries(inventory).length === 0) {
       Toast.show({
         type: "error",
@@ -83,7 +232,16 @@ const HomeScreen = () => {
       return;
     }
 
+    if (!recipientEmail) {
+      Toast.show({
+        type: "error",
+        text1: "Please enter an email.",
+      });
+      return;
+    }
+
     setIsLoading(true);
+
     try {
       const response = await fetch(
         "https://nopales-inv-backend.vercel.app/api/inventoryApi",
@@ -92,11 +250,15 @@ const HomeScreen = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(inventory),
+          body: JSON.stringify({
+            email: recipientEmail,
+            data: inventory,
+          }),
         }
       );
       const msg = await response.json();
       setIsLoading(false);
+      setRecipientEmail("");
       Toast.show({
         type: "success",
         text1: msg?.message || "Email sent successfully!",
@@ -104,6 +266,7 @@ const HomeScreen = () => {
     } catch (error) {
       console.error("Error:", error);
       setIsLoading(false);
+      setRecipientEmail("");
       Toast.show({
         type: "error",
         text1: "Something went wrong.",
@@ -170,7 +333,14 @@ const HomeScreen = () => {
             title="Sparkling Wine"
           ></CollapsibleView>
           <CollapsibleView data={roseList} title="Rose"></CollapsibleView>
-          <CollapsibleView title="Red Wine"></CollapsibleView>
+          <CollapsibleView
+            data={redWineList}
+            title="Red Wine"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={whiteWineList}
+            title="White Wine"
+          ></CollapsibleView>
           <CollapsibleView title="Tequilla (Blanco)"></CollapsibleView>
           <CollapsibleView title="Tequilla (Reposado)"></CollapsibleView>
           <CollapsibleView title="Tequilla (Anejo)"></CollapsibleView>
@@ -180,11 +350,54 @@ const HomeScreen = () => {
           <CollapsibleView title="Spirits (Scotch)"></CollapsibleView>
           <CollapsibleView title="Spirits (Whiskey)"></CollapsibleView>
           <CollapsibleView title="Spirits (Rum)"></CollapsibleView>
-          <CollapsibleView title="Beers"></CollapsibleView>
+          <CollapsibleView data={beerList} title="Beers"></CollapsibleView>
           <CollapsibleView title="Liqueur"></CollapsibleView>
           <CollapsibleView title="Miscellaneous"></CollapsibleView>
         </Container>
       </ScrollView>
+
+      <Modal visible={isModalVisible} transparent style={{}}>
+        <Container style={styles.modalView}>
+          <Container>
+            <TextComponent style={{ fontSize: 16 }}>
+              Enter the email address where you want to send the Excel file.
+            </TextComponent>
+            <TextInput
+              value={recipientEmail}
+              onChangeText={(text) => setRecipientEmail(text)}
+              style={{
+                margin: 0,
+                padding: 6,
+                borderWidth: 0.5,
+                borderColor: "gray",
+                borderRadius: 2,
+              }}
+              placeholder="email"
+            />
+            <Container
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                marginTop: 15,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setRecipientEmail("");
+                  setIsModalVisible(false);
+                }}
+              >
+                <TextComponent style={{ fontSize: 16, color: "red" }}>
+                  Cancel
+                </TextComponent>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleSave}>
+                <TextComponent style={{ fontSize: 16 }}>Send</TextComponent>
+              </TouchableOpacity>
+            </Container>
+          </Container>
+        </Container>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -203,5 +416,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     left: "30%",
     top: "40%",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 4,
+    padding: 6,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 2,
+    marginTop: "40%",
   },
 });

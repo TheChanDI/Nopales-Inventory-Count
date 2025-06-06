@@ -1,19 +1,41 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
+interface ItemData {
+  count: number;
+  boxCount?: number;
+}
+
+interface InventoryData {
+  [type: string]: {
+    [label: string]: ItemData;
+  };
+}
+
 interface InventoryState {
-  inventory: any;
-  setInventory: (inventory: any) => void;
+  inventory: InventoryData;
+  setItem: (type: string, label: string, item: ItemData) => void;
   resetInventory: () => void;
+  getInventory: () => InventoryData;
 }
 
 const useInventoryStore = create<InventoryState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         inventory: {},
-        setInventory: (inventory) => set({ inventory }),
+        setItem: (type, label, item) =>
+          set((state) => ({
+            inventory: {
+              ...state.inventory,
+              [type]: {
+                ...state.inventory[type],
+                [label]: item,
+              },
+            },
+          })),
         resetInventory: () => set({ inventory: {} }),
+        getInventory: () => get().inventory,
       }),
       { name: "inventory" }
     )

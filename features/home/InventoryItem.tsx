@@ -5,6 +5,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import * as Haptics from "expo-haptics";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import shallow from "zustand/shallow";
 
 interface Props {
   type: string;
@@ -13,36 +14,46 @@ interface Props {
 }
 
 const InventoryItem = ({ label, perBox, type }: Props) => {
-  const inventory = useInventoryStore((state) => state.inventory);
-  const setInventory = useInventoryStore((state) => state.setInventory);
-  const count = inventory[type]?.[label]?.count ?? 0;
-  const boxCount = inventory[type]?.[label]?.boxCount ?? 0;
+  const inventory = useInventoryStore(
+    (state) => state.inventory[type]?.[label],
+    shallow
+  );
+  const setItem = useInventoryStore((state) => state.setItem);
 
+  // Safely access count and boxCount
+  const count = inventory?.count ?? 0;
+  const boxCount = inventory?.boxCount ?? 0;
+
+  // Increment logic
   const increment = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (count === perBox - 1) {
-      setInventory({
-        ...inventory,
-        [type]: {
-          ...inventory[type],
-          [label]: {
-            count: 0,
-            boxCount: boxCount + 1,
-          },
-        },
-      });
+      setItem(type, label, { count: 0, boxCount: boxCount + 1 });
     } else {
-      setInventory({
-        ...inventory,
-        [type]: {
-          ...inventory[type],
-          [label]: {
-            ...inventory[type]?.[label],
-            count: count + 1,
-          },
-        },
-      });
+      setItem(type, label, { count: count + 1, boxCount });
     }
+  };
+
+  // Handle decrement
+  const decrement = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    setItem(type, label, { count: count > 0 ? count - 1 : 0, boxCount });
+  };
+
+  // Handle adding a box
+  const addBox = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    setItem(type, label, { count, boxCount: boxCount + 1 });
+  };
+
+  // Handle subtracting a box
+  const subtractBox = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    setItem(type, label, { count, boxCount: boxCount > 0 ? boxCount - 1 : 0 });
   };
 
   return (
@@ -79,22 +90,7 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
             gap: 10,
           }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setInventory({
-                ...inventory,
-                [type]: {
-                  ...inventory[type],
-                  [label]: {
-                    ...inventory[type]?.[label],
-                    count: count > 0 ? count - 1 : 0,
-                  },
-                },
-              });
-            }}
-            activeOpacity={0.7}
-          >
+          <TouchableOpacity onPress={decrement} activeOpacity={0.7}>
             <AntDesign name="minussquareo" size={22} color="#273022" />
           </TouchableOpacity>
           <TextComponent style={{ fontSize: 22 }}>{count}</TextComponent>
@@ -104,20 +100,7 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
         </Container>
         <Container style={{ flexDirection: "row", marginLeft: 20, gap: 20 }}>
           <TouchableOpacity
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-              setInventory({
-                ...inventory,
-                [type]: {
-                  ...inventory[type],
-                  [label]: {
-                    ...inventory[type]?.[label],
-                    boxCount: boxCount + 1,
-                  },
-                },
-              });
-            }}
+            onPress={addBox}
             activeOpacity={0.7}
             style={{
               backgroundColor: "#273022",
@@ -130,19 +113,7 @@ const InventoryItem = ({ label, perBox, type }: Props) => {
             </TextComponent>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setInventory({
-                ...inventory,
-                [type]: {
-                  ...inventory[type],
-                  [label]: {
-                    ...inventory[type]?.[label],
-                    boxCount: boxCount > 0 ? boxCount - 1 : 0,
-                  },
-                },
-              });
-            }}
+            onPress={subtractBox}
             activeOpacity={0.7}
             style={{
               backgroundColor: "white",

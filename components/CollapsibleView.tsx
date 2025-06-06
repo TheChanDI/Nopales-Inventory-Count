@@ -50,6 +50,6 @@ const CollapsibleView = ({ children, title, data }: Props) => {
   );
 };
 
-export default CollapsibleView;
+export default React.memo(CollapsibleView);
 
 const styles = StyleSheet.create({});
