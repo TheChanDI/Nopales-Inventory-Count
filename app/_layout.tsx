@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Fonts } from "@/theme/fonts";
 import {
   DarkTheme,
   DefaultTheme,
@@ -12,7 +13,11 @@ import Toast from "react-native-toast-message";
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Playpenlight: require("../assets/fonts/PlaypenSans-Light.ttf"),
+    PlaypenRegular: require("../assets/fonts/PlaypenSans-Regular.ttf"),
+    PlaypenMedium: require("../assets/fonts/PlaypenSans-Medium.ttf"),
+    PlaypenSemiBold: require("../assets/fonts/PlaypenSans-SemiBold.ttf"),
+    PlaypenBold: require("../assets/fonts/PlaypenSans-Bold.ttf"),
   });
 
   if (!loaded) {
@@ -31,6 +36,7 @@ export default function RootLayout() {
 
             headerTitleStyle: {
               color: "white",
+              fontFamily: Fonts.semiBold_font,
             },
             headerStyle: {
               backgroundColor: "#576056",

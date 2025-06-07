@@ -649,6 +649,7 @@ const HomeScreen = () => {
         </Container>
       )}
       <ScrollView
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ paddingBottom: 30 }}
         style={{ flex: 1 }}
       >

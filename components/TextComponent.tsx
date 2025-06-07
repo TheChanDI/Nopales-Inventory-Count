@@ -19,6 +19,6 @@ const styles = StyleSheet.create({
   baseStyle: {
     fontSize: fontPixel(LARGE_FONT_SIZE),
     lineHeight: fontPixel(33),
-    fontFamily: Fonts.bold_font,
+    fontFamily: Fonts.lightPrimary_font,
   },
 });
