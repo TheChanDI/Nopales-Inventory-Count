@@ -163,6 +163,221 @@ const whiteWineList = [
   },
 ];
 
+const tequilaBlancoList = [
+  {
+    label: "Espolon Silver",
+    perBox: 12,
+  },
+  {
+    label: "Olmeca Altos Plata",
+    perBox: 1,
+  },
+  {
+    label: "Tromba Blanco",
+    perBox: 1,
+  },
+  {
+    label: "Don Juilo Blanco",
+    perBox: 1,
+  },
+  {
+    label: "Patron Silver",
+    perBox: 1,
+  },
+  {
+    label: "Kah tequila",
+    perBox: 1,
+  },
+  {
+    label: "Herradura Plata",
+    perBox: 1,
+  },
+  {
+    label: "Fortaleza Blanco",
+    perBox: 1,
+  },
+  {
+    label: "Tequila G4 Blanco",
+    perBox: 6,
+  },
+];
+
+const tequilaReposadoList = [
+  {
+    label: "Espolon Reposado",
+    perBox: 12,
+  },
+  {
+    label: "Don Juilo Reposado",
+    perBox: 1,
+  },
+  {
+    label: "Patron Reposado",
+    perBox: 1,
+  },
+  {
+    label: "Kah reposado",
+    perBox: 1,
+  },
+  {
+    label: "Herradura Reposado",
+    perBox: 1,
+  },
+  {
+    label: "Fortaleza Reposado",
+    perBox: 1,
+  },
+  {
+    label: "Tequila G4 Reposado",
+    perBox: 6,
+  },
+];
+
+const tequilaAnejoList = [
+  {
+    label: "Espolon Anejo",
+    perBox: 12,
+  },
+  {
+    label: "Don Juilo Anejo",
+    perBox: 1,
+  },
+  {
+    label: "Patron Anejo",
+    perBox: 1,
+  },
+  {
+    label: "La Cofradia Ceramic",
+    perBox: 1,
+  },
+  {
+    label: "Herradura Anejo",
+    perBox: 1,
+  },
+  {
+    label: "Fortaleza Anejo",
+    perBox: 1,
+  },
+  {
+    label: "Tequila G4 Anejo",
+    perBox: 6,
+  },
+];
+
+const mezcalList = [
+  {
+    label: "Quiquiriqui Espadin ",
+    perBox: 1,
+  },
+  {
+    label: "Wahaka Espadin",
+    perBox: 1,
+  },
+  {
+    label: "Los Siete Misterios ‘Doba-Yej ",
+    perBox: 1,
+  },
+  {
+    label: "Ilegal Joven",
+    perBox: 1,
+  },
+  {
+    label: "Ilegal Reposado",
+    perBox: 1,
+  },
+  {
+    label: "Ilegal Añejo",
+    perBox: 1,
+  },
+  {
+    label: "Joven metoro",
+    perBox: 1,
+  },
+  {
+    label: "El Jorgorjio Mexicana",
+    perBox: 1,
+  },
+];
+
+const vodkaList = [
+  {
+    label: "Grey Goose",
+    perBox: 1,
+  },
+  {
+    label: "Smirnoff",
+    perBox: 1,
+  },
+  {
+    label: "42 below",
+    perBox: 1,
+  },
+];
+
+const ginList = [
+  {
+    label: "Four pillars rare dry ",
+    perBox: 1,
+  },
+  {
+    label: "Gordons London Dry Gin",
+    perBox: 1,
+  },
+  {
+    label: "Hendrick’s ",
+    perBox: 1,
+  },
+];
+
+const scotchList = [
+  {
+    label: "Dewar's 12",
+    perBox: 1,
+  },
+  {
+    label: "Macallan 12 ",
+    perBox: 1,
+  },
+];
+
+const whiskeyList = [
+  {
+    label: "Jack Daniels ",
+    perBox: 1,
+  },
+  {
+    label: "Wild Turkey 101",
+    perBox: 1,
+  },
+  {
+    label: "Old Forester",
+    perBox: 1,
+  },
+  {
+    label: "Maker’s mark ",
+    perBox: 1,
+  },
+  {
+    label: "Jameson Irish Whisky",
+    perBox: 1,
+  },
+];
+
+const rumList = [
+  {
+    label: "Bacardi 8",
+    perBox: 1,
+  },
+  {
+    label: "Bacardi white rum",
+    perBox: 1,
+  },
+  {
+    label: "Sailor spiced ",
+    perBox: 1,
+  },
+];
+
 const beerList = [
   {
     label: "Peroni",
@@ -206,6 +421,121 @@ const beerList = [
   },
 ];
 
+const liqueurList = [
+  {
+    label: "Maison Triple Sec",
+    perBox: 12,
+  },
+  {
+    label: "Midori Melon",
+    perBox: 1,
+  },
+  {
+    label: "Frangelico",
+    perBox: 1,
+  },
+  {
+    label: "Kahlua",
+    perBox: 1,
+  },
+  {
+    label: "Red Sweet Vermouth",
+    perBox: 1,
+  },
+  {
+    label: "Peach Schnapps",
+    perBox: 1,
+  },
+  {
+    label: "Pisco malpaso",
+    perBox: 1,
+  },
+  {
+    label: "Soho Lychee liqueur",
+    perBox: 1,
+  },
+  {
+    label: "Passionfruit liequeur",
+    perBox: 1,
+  },
+  {
+    label: "Chambord Raspberry liqueur",
+    perBox: 1,
+  },
+  {
+    label: "Blue curacao",
+    perBox: 1,
+  },
+  {
+    label: "Baileys",
+    perBox: 1,
+  },
+  {
+    label: "Sagatiba Cachaca",
+    perBox: 1,
+  },
+  {
+    label: "Campari",
+    perBox: 1,
+  },
+  {
+    label: "Disaronno Amaretto",
+    perBox: 1,
+  },
+  {
+    label: "Amaretti non Alchoholic",
+    perBox: 1,
+  },
+  {
+    label: "Aperol",
+    perBox: 1,
+  },
+];
+
+const miscellaneousList = [
+  {
+    label: "Foamer",
+    perBox: 1,
+  },
+  {
+    label: "Angostura Bitter",
+    perBox: 1,
+  },
+  {
+    label: "Coffee Tablets",
+    perBox: 16,
+  },
+  {
+    label: "Bloody Mary mix",
+    perBox: 1,
+  },
+  {
+    label: "Lime Juice Coridal",
+    perBox: 1,
+  },
+  {
+    label: "Cucumber Monin",
+    perBox: 1,
+  },
+  {
+    label: "Grenadine Monin",
+    perBox: 1,
+  },
+];
+
+/**
+ * The HomeScreen component is the main screen of the app. It displays a list
+ * of all the items in the inventory, grouped by category. The user can
+ * scroll through the list and select an item to see its details.
+ *
+ * The screen also has a "Sent" button that triggers a modal to appear, which
+ * prompts the user to enter an email address. When the user enters an email
+ * address and presses the "Send" button, the app sends an email to the entered
+ * email address with the current inventory as an Excel attachment.
+ *
+ * The screen also has a "Reset" button that resets the inventory to its
+ * initial state.
+ */
 const HomeScreen = () => {
   const inventory = useInventoryStore((state) => state.getInventory());
   const resetInventory = useInventoryStore((state) => state.resetInventory);
@@ -341,18 +671,45 @@ const HomeScreen = () => {
             data={whiteWineList}
             title="White Wine"
           ></CollapsibleView>
-          <CollapsibleView title="Tequilla (Blanco)"></CollapsibleView>
-          <CollapsibleView title="Tequilla (Reposado)"></CollapsibleView>
-          <CollapsibleView title="Tequilla (Anejo)"></CollapsibleView>
-          <CollapsibleView title="Mezcal"></CollapsibleView>
-          <CollapsibleView title="Spirits (Vodka)"></CollapsibleView>
-          <CollapsibleView title="Spirits (Gin)"></CollapsibleView>
-          <CollapsibleView title="Spirits (Scotch)"></CollapsibleView>
-          <CollapsibleView title="Spirits (Whiskey)"></CollapsibleView>
-          <CollapsibleView title="Spirits (Rum)"></CollapsibleView>
+          <CollapsibleView
+            data={tequilaBlancoList}
+            title="Tequilla (Blanco)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={tequilaReposadoList}
+            title="Tequilla (Reposado)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={tequilaAnejoList}
+            title="Tequilla (Anejo)"
+          ></CollapsibleView>
+          <CollapsibleView data={mezcalList} title="Mezcal"></CollapsibleView>
+          <CollapsibleView
+            data={vodkaList}
+            title="Spirits (Vodka)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={ginList}
+            title="Spirits (Gin)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={scotchList}
+            title="Spirits (Scotch)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={whiskeyList}
+            title="Spirits (Whiskey)"
+          ></CollapsibleView>
+          <CollapsibleView
+            data={rumList}
+            title="Spirits (Rum)"
+          ></CollapsibleView>
           <CollapsibleView data={beerList} title="Beers"></CollapsibleView>
-          <CollapsibleView title="Liqueur"></CollapsibleView>
-          <CollapsibleView title="Miscellaneous"></CollapsibleView>
+          <CollapsibleView data={liqueurList} title="Liqueur"></CollapsibleView>
+          <CollapsibleView
+            data={miscellaneousList}
+            title="Miscellaneous"
+          ></CollapsibleView>
         </Container>
       </ScrollView>
 
