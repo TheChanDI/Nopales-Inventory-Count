@@ -2,13 +2,13 @@ import CollapsibleView from "@/components/CollapsibleView";
 import { Container } from "@/components/Container";
 import { TextComponent } from "@/components/TextComponent";
 import useInventoryStore from "@/store/useInventoryStore";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  FlatList,
   Modal,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -510,7 +510,7 @@ const miscellaneousList = [
     perBox: 1,
   },
   {
-    label: "Lime Juice Coridal",
+    label: "Lime Juice Cordial",
     perBox: 1,
   },
   {
@@ -542,6 +542,25 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recipientEmail, setRecipientEmail] = useState("");
+  const [inventoryList, setInventoryList] = useState([]);
+
+  useEffect(() => {
+    fetchList();
+  }, []);
+
+  const fetchList = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("http://localhost:3000/api");
+      const data = await response.json();
+      console.log(data, "frontend -->");
+      setInventoryList(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   /**
    * Handles the logic for when the "Sent" button is pressed.
@@ -648,18 +667,21 @@ const HomeScreen = () => {
           </TextComponent>
         </Container>
       )}
-      <ScrollView
-        keyboardDismissMode="interactive"
-        contentContainerStyle={{ paddingBottom: 30 }}
-        style={{ flex: 1 }}
+
+      <Container
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 10,
+        }}
       >
-        <Container
-          style={{
-            paddingHorizontal: 20,
-            paddingTop: 10,
-          }}
-        >
-          <CollapsibleView
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={inventoryList}
+          renderItem={({ item }) => (
+            <CollapsibleView data={item.list} title={item.category} />
+          )}
+        />
+        {/* <CollapsibleView
             data={sparkingList}
             title="Sparkling Wine"
           ></CollapsibleView>
@@ -710,9 +732,8 @@ const HomeScreen = () => {
           <CollapsibleView
             data={miscellaneousList}
             title="Miscellaneous"
-          ></CollapsibleView>
-        </Container>
-      </ScrollView>
+          ></CollapsibleView> */}
+      </Container>
 
       <Modal visible={isModalVisible} transparent style={{}}>
         <Container style={styles.modalView}>
