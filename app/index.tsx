@@ -2,12 +2,13 @@ import CollapsibleView from "@/components/CollapsibleView";
 import { Container } from "@/components/Container";
 import { TextComponent } from "@/components/TextComponent";
 import useInventoryStore from "@/store/useInventoryStore";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   FlatList,
   Modal,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   TextInput,
@@ -543,6 +544,7 @@ const HomeScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recipientEmail, setRecipientEmail] = useState("");
   const [inventoryList, setInventoryList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchList();
@@ -551,14 +553,16 @@ const HomeScreen = () => {
   const fetchList = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api");
+      const response = await fetch(
+        "https://nopales-inventory-backend.vercel.app/api"
+      );
       const data = await response.json();
-      console.log(data, "frontend -->");
       setInventoryList(data);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -641,6 +645,10 @@ const HomeScreen = () => {
       { cancelable: false }
     );
   };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchList();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#E3E8E1" }}>
@@ -663,7 +671,7 @@ const HomeScreen = () => {
         <Container style={styles.indicatorContainer}>
           <ActivityIndicator size={"large"} color={"#273022"} />
           <TextComponent style={{ alignSelf: "center", marginTop: 10 }}>
-            Sending...
+            Loading...
           </TextComponent>
         </Container>
       )}
@@ -677,7 +685,15 @@ const HomeScreen = () => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={inventoryList}
-          renderItem={({ item }) => (
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#9Bd35A", "#689F38"]} // Android
+              tintColor="#689F38" // iOS
+            />
+          }
+          renderItem={({ item }: any) => (
             <CollapsibleView data={item.list} title={item.category} />
           )}
         />
